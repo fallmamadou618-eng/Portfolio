@@ -362,38 +362,28 @@ nav ul a.actif {
     width: 100%;
     margin-bottom: 0.5rem;
   }
-}/* RECHERCHE */
-.recherche {
-  text-align: center;
-  padding: 1rem 2rem 2rem;
 }
-
-.recherche h2 {
+/* MESSAGES SUCCÈS ET ERREUR */
+.succes {
+  background-color: #1a4a1a;
+  color: #4caf50;
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
   margin-bottom: 1rem;
-  color: #e85d26;
+  border: 1px solid #4caf50;
 }
 
-.recherche input {
-  width: 60%;
-  padding: 0.7rem 1rem;
+.erreur {
+  background-color: #4a1a1a;
+  color: #f44336;
+  padding: 0.8rem 1rem;
   border-radius: 6px;
-  border: 1px solid #444444;
-  background-color: #222222;
-  color: #ffffff;
-  font-size: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #f44336;
 }
-
-.recherche button {
-  padding: 0.7rem 1.2rem;
-  margin-left: 0.5rem;
-  background-color: #e85d26;
-  color: #ffffff;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.recherche button:hover {
-  background-color: #ff7a45;
+/* ERREUR PAR CHAMP */
+.erreur-champ {
+  color: #f44336;
+  font-size: 0.85rem;
+  margin-top: -0.5rem;
 }
