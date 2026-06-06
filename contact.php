@@ -1,6 +1,13 @@
 <?php
+session_start();
 require 'fonction.php';
-
+ require 'config/connexion.php'; 
+// Enregistrer la visite
+$stmt = $pdo->prepare('INSERT INTO visites (page, ip) VALUES (:page, :ip)');
+$stmt->execute([
+    ':page' => basename($_SERVER['PHP_SELF']),
+    ':ip'   => $_SERVER['REMOTE_ADDR'],
+]);
 // Initialisation des variables
 $erreurs = [];
 $succes  = false;
@@ -21,8 +28,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $erreurs[] = 'Le message ne peut pas être vide.';
 
     if (empty($erreurs)) {
-        $succes = true;
-    }
+    $stmt = $pdo->prepare(
+        'INSERT INTO messages_contact (nom, email, message)
+         VALUES (:nom, :email, :message)'
+    );
+    $stmt->execute([
+        ':nom'     => $nom,
+        ':email'   => $email,
+        ':message' => $message,
+    ]);
+    $succes = true;
+}
 }
 ?>
 <!DOCTYPE html>
@@ -74,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <label for="message">Message :</label>
       <textarea id="message" name="message" rows="5"
         placeholder="Votre message..." required><?= $message ?></textarea>
-
+<input type="hidden" name="csrf_token" value="<?= generer_token_csrf() ?>">
       <button type="submit" class="bouton">Envoyer</button>
 
     </form>
@@ -107,8 +123,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['envoyer_projet'])) {
         $erreurs_projet['description'] = 'La description est obligatoire.';
 
     if (empty($erreurs_projet)) {
-        $succes_projet = true;
-    }
+    $stmt = $pdo->prepare(
+        'INSERT INTO demandes_projet (nom, email, type_projet, budget, description)
+         VALUES (:nom, :email, :type_projet, :budget, :description)'
+    );
+    $stmt->execute([
+        ':nom'         => $demande['nom'],
+        ':email'       => $demande['email'],
+        ':type_projet' => $demande['type_projet'],
+        ':budget'      => $demande['budget'],
+        ':description' => $demande['description'],
+    ]);
+    $succes_projet = true;
+}
 }
 ?>
 
@@ -173,7 +200,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['envoyer_projet'])) {
       <?php if (isset($erreurs_projet['description'])): ?>
         <span class="erreur-champ"><?= $erreurs_projet['description'] ?></span>
       <?php endif; ?>
-
+<input type="hidden" name="csrf_token" value="<?= generer_token_csrf() ?>">
       <button type="submit" name="envoyer_projet" class="bouton">Envoyer la demande</button>
 
     </form>
