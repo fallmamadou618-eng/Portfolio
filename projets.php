@@ -1,43 +1,34 @@
 <?php
 require 'fonction.php';
-
-// Tableau de projets — sera remplacé par la base de données plus tard
-$projets = [
-    [
-        'titre'        => 'Boutique en ligne',
-        'description'  => 'Création d\'une boutique en ligne pour artisans sénégalais.',
-        'technologies' => ['HTML', 'CSS', 'PHP', 'MySQL'],
-    ],
-    [
-        'titre'        => 'Configuration réseau',
-        'description'  => 'Mise en place et configuration d\'un réseau informatique local.',
-        'technologies' => ['Réseau', 'Infrastructure'],
-    ],
-    [
-        'titre'        => 'Analyse de matchs',
-        'description'  => 'Application web permettant d\'analyser les statistiques de matchs de football.',
-        'technologies' => ['HTML', 'CSS', 'JavaScript', 'Python'],
-    ],
-];
-
-// Filtrage par mot-clé
+require 'config/connexion.php';
+// Enregistrer la visite
+$stmt = $pdo->prepare('INSERT INTO visites (page, ip) VALUES (:page, :ip)');
+$stmt->execute([
+    ':page' => basename($_SERVER['PHP_SELF']),
+    ':ip'   => $_SERVER['REMOTE_ADDR'],
+]);
+// Récupérer le mot-clé de recherche
 $mot_cle   = nettoyer($_GET['q'] ?? '');
 $resultats = [];
 
+// Lire les projets depuis MySQL
 if ($mot_cle !== '') {
-    foreach ($projets as $projet) {
-        $titre       = strtolower($projet['titre']);
-        $description = strtolower($projet['description']);
-        $recherche   = strtolower($mot_cle);
-
-        if (strpos($titre, $recherche) !== false ||
-            strpos($description, $recherche) !== false) {
-            $resultats[] = $projet;
-        }
-    }
+    $stmt = $pdo->prepare(
+        'SELECT * FROM projets
+         WHERE titre LIKE :mot1 
+         OR description LIKE :mot2 
+         OR technologies LIKE :mot3'
+    );
+    $stmt->execute([
+        ':mot1' => '%' . $mot_cle . '%',
+        ':mot2' => '%' . $mot_cle . '%',
+        ':mot3' => '%' . $mot_cle . '%',
+    ]);
 } else {
-    $resultats = $projets;
+    $stmt = $pdo->query('SELECT * FROM projets');
 }
+
+$resultats = $stmt->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -72,20 +63,20 @@ if ($mot_cle !== '') {
 
   <!-- GRILLE DE PROJETS -->
   <section class="projets">
+<?php foreach ($resultats as $projet) : ?>
+  <article class="carte-projet">
+    <h3><?= htmlspecialchars($projet['titre']) ?></h3>
+    <p><?= htmlspecialchars($projet['description']) ?></p>
+    <p class="technologies"><?= htmlspecialchars($projet['technologies']) ?></p>
+    <a href="#" class="bouton">Voir</a>
+  </article>
+<?php endforeach; ?>
 
-    <?php foreach ($resultats as $projet) : ?>
-      <article class="carte-projet">
-        <h3><?= htmlspecialchars($projet['titre']) ?></h3>
-        <p><?= htmlspecialchars($projet['description']) ?></p>
-        <div class="technologies">
-          <?php foreach ($projet['technologies'] as $tech) : ?>
-            <span class="projet-tags"><?= htmlspecialchars($tech) ?></span>
-          <?php endforeach; ?>
-        </div>
-        <a href="#" class="bouton">Voir</a>
-      </article>
-    <?php endforeach; ?>
-
+<?php if (empty($resultats)) : ?>
+  <p style="text-align:center; color:#aaa; padding:2rem;">
+    Aucun projet trouvé pour "<?= htmlspecialchars($mot_cle) ?>".
+  </p>
+<?php endif; ?>
     <?php if (empty($resultats)) : ?>
       <p style="text-align:center; color:#aaa; padding:2rem;">
         Aucun projet ne correspond à ta recherche.
