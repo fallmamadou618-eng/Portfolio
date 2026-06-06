@@ -387,3 +387,66 @@ nav ul a.actif {
   font-size: 0.85rem;
   margin-top: -0.5rem;
 }
+/* ADMIN */
+.stats-admin {
+  padding: 3rem 2rem;
+}
+
+.stat-card {
+  background-color: #1a1a1a;
+  border: 1px solid #333333;
+  border-radius: 10px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 3rem;
+  font-weight: bold;
+  color: #e85d26;
+}
+
+.stat-label {
+  font-size: 1rem;
+  color: #aaaaaa;
+}
+
+.liens-admin {
+  padding: 2rem;
+}
+
+.actions-grid {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+/* MESSAGES ADMIN */
+.message-card {
+  background-color: #1a1a1a;
+  border: 1px solid #333333;
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.message-header {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.message-header strong {
+  color: #e85d26;
+}
+
+.message-header span {
+  color: #aaaaaa;
+  font-size: 0.9rem;
+}
+
+.date {
+  margin-left: auto;
+  font-size: 0.85rem !important;
+}
