@@ -1,13 +1,11 @@
 <?php
 
-// Paramètres de connexion à la base de données
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'portfolio_db');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+define('DB_HOST', 'sql102.infinityfree.com');
+define('DB_NAME', 'if0_41939992_portfolio');
+define('DB_USER', 'if0_41939992');
+define('DB_PASS', 'Unhp6SQQei8Bf');
 define('DB_CHARSET', 'utf8mb4');
 
-// Connexion PDO
 try {
     $pdo = new PDO(
         'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=' . DB_CHARSET,
