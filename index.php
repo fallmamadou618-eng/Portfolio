@@ -1,4 +1,14 @@
-<?php require 'fonction.php'; ?>
+<?php
+require 'fonction.php';
+require 'config/connexion.php';
+
+// Enregistrer la visite
+$stmt = $pdo->prepare('INSERT INTO visites (page, ip) VALUES (:page, :ip)');
+$stmt->execute([
+    ':page' => basename($_SERVER['PHP_SELF']),
+    ':ip'   => $_SERVER['REMOTE_ADDR'],
+]);
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
